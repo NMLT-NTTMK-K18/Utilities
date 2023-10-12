@@ -1,0 +1,37 @@
+name: Auto Update Working Progress
+
+on:
+  push:
+    branches: ["main", "dev"]
+  pull_request:
+    branches: ["main", "dev"]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
+permissions: write-all
+
+jobs:
+  check:
+    name: Working Progress
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@main
+
+      - uses: actions/setup-python@main
+        with:
+          python-version: "3.11"
+
+      - name: Run python script
+        run: python scripts/checkWorkedProject.py
+
+      - name: Github commit & push
+        run: |
+          git config --global user.email "action@github.com"
+          git config --global user.name "GitHub Action"
+          git add .
+          git commit -m "✅ Auto update Working Progress"
+          git push
