@@ -1,0 +1,12 @@
+# No tracking stuff
+.vs
+.vscode
+**/*test*
+**/*temp*
+
+# VS
+**/x64
+Bai*/*.exe
+
+# Python
+# **/*.py
