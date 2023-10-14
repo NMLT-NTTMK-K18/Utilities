@@ -21,6 +21,7 @@ def listOfProject():
     directories = []
     directories += [project_dir for project_dir in os.listdir(
         './') if re.match(re_pattern, project_dir) and os.path.isdir(project_dir)]
+    directories.sort()
     count_projects = len(directories)
 
 
