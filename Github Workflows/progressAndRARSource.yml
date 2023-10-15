@@ -53,7 +53,10 @@ jobs:
         run: sudo apt-get install rar
 
       - name: RAR source
-        run: rar a -r ${{ env.RAR_SOURCE_NAME }}.rar Bai* *.sln
+        run: |
+          mkdir ${{ env.RAR_SOURCE_NAME }}
+          cp -r Bai* *.sln ${{ env.RAR_SOURCE_NAME }}
+          rar a -r ${{ env.RAR_SOURCE_NAME }}.rar ${{ env.RAR_SOURCE_NAME }}
 
       - name: Delete RAR release & tag
         continue-on-error: true
