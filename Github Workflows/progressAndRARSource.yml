@@ -55,16 +55,8 @@ jobs:
       - name: RAR source
         run: |
           mkdir ${{ env.RAR_SOURCE_NAME }}
-          cp -r Bai* *.sln ${{ env.RAR_SOURCE_NAME }}
+          cp -r *Bai* *.sln ${{ env.RAR_SOURCE_NAME }}
           rar a -r ${{ env.RAR_SOURCE_NAME }}.rar ${{ env.RAR_SOURCE_NAME }}
-
-      - name: Delete RAR release & tag
-        continue-on-error: true
-        uses: dev-drprasad/delete-older-releases@master
-        with:
-          keep_latest: 0
-          delete_tags: true
-          delete_tag_pattern: .*RAR.*
 
       - name: Release RAR source code
         uses: svenstaro/upload-release-action@master

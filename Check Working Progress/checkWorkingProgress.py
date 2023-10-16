@@ -1,7 +1,7 @@
 import re
 import os
 
-re_pattern = r'^Bai[0-9]{3}'
+re_pattern = r'.*Bai[0-9]{3}'
 re_pattern_readme = r'\[!\[WorkedProject Badge\].+'
 replace_worked_project_badge = r'[![WorkedProject Badge](https://img.shields.io/badge/worked_project-{count_worked_files}%2F{count_projects}-82A0D8?style=for-the-badge)](./UnworkedProject.md)'
 source_code_filename = 'Source.cpp'
