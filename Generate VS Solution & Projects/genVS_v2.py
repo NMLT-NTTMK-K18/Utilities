@@ -33,8 +33,7 @@ scripts/*.spec
 
 # VS
 **/x64
-Bai*/*.exe
-COPY
+*Bai*/*.exe
 
 # Python
 **/*.py
