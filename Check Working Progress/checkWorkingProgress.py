@@ -34,12 +34,13 @@ def checkWorkedProject():
 
     i = 1
     for project_dir in directories:
-        if os.path.getsize(os.path.join(project_dir, source_code_filename)) > 75:
+        if os.path.getsize(os.path.join(project_dir, source_code_filename)) > 100:
             count_worked_files += 1
         else:
+            project_dir_relative_path = project_dir.replace(' ', '%20')
             with open(UnworkedProject_filename, 'a', encoding='utf8') as file:
                 file.write(
-                    f'{i}.\t[{project_dir}](../{project_dir}/{source_code_filename})\n')
+                    f'{i}.\t[{project_dir}](../{project_dir_relative_path}/{source_code_filename})\n')
             i += 1
 
 
