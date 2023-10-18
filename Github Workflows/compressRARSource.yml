@@ -1,7 +1,9 @@
 name: RAR Source
 
 on:
-  workflows: ["Auto Update Working Progress"]
+  workflow_run:
+    workflows: ["Auto Update Working Progress"]
+    types: [completed]
   workflow_dispatch:
 
 concurrency:
@@ -18,7 +20,6 @@ jobs:
   rar-source:
     name: RAR Source
     runs-on: ubuntu-latest
-    needs: working-progress
     steps:
       - name: Checkout
         uses: actions/checkout@main
@@ -39,4 +40,6 @@ jobs:
           file: ${{ env.RAR_SOURCE_NAME }}.rar
           tag: RAR
           release_name: RAR Source Code
+          overwrite: true
+          promote: true
           body: "Rar source code để nộp bài, không bao gồm các file ngoài Visual Studio"

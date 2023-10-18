@@ -31,8 +31,7 @@ jobs:
           python-version: "3.11"
 
       - name: Download checkWorkingProgress.py
-        run:
-          curl -s https://github.com/NMLT-NTTMK-K18/Utilities/raw/main/Check%20Working%20Progress/checkWorkingProgress.py > checkWorkingProgress.py
+        run: curl -s https://github.com/NMLT-NTTMK-K18/Utilities/raw/main/Check%20Working%20Progress/checkWorkingProgress.py > checkWorkingProgress.py
 
       - name: Run python script
         run: python checkWorkingProgress.py
