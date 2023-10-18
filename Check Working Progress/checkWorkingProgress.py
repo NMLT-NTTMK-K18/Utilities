@@ -7,6 +7,9 @@ replace_worked_project_badge = r'[![WorkedProject Badge](https://img.shields.io/
 source_code_filename = 'Source.cpp'
 README_file_dir = 'docs/README.md'
 UnworkedProject_filename = 'docs/UnworkedProject.md'
+undone_sign_list = [r'//undone', r'//chuaxong',
+                    r'//haventdone', r'//haven\'tdone']
+done_sign_list = [r'//done', r'//xong', r'//daxong', r'//done']
 UnworkedProject_file_content = r"""
 ## UNWORKED PROJECTS
 
@@ -25,6 +28,21 @@ def listOfProject():
     count_projects = len(directories)
 
 
+def forceCheckDone(file_path):
+    with open(file_path, 'r', encoding='utf8') as f:
+        content = f.read().replace(' ', '').lower()
+
+    for sign in undone_sign_list:
+        if sign in content:
+            return -1
+
+    for sign in done_sign_list:
+        if sign in content:
+            return 1
+
+    return 0
+
+
 def checkWorkedProject():
     global count_worked_files
     count_worked_files = 0
@@ -34,7 +52,10 @@ def checkWorkedProject():
 
     i = 1
     for project_dir in directories:
-        if os.path.getsize(os.path.join(project_dir, source_code_filename)) > 100:
+        file_path = os.path.join(project_dir, source_code_filename)
+        if forceCheckDoneStatus := (forceCheckDone(file_path)) == 1:
+            count_worked_files += 1
+        elif forceCheckDoneStatus == 0 and os.path.getsize(file_path) > 100:
             count_worked_files += 1
         else:
             project_dir_relative_path = project_dir.replace(' ', '%20')
