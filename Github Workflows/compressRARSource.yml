@@ -1,0 +1,42 @@
+name: RAR Source
+
+on:
+  workflows: ["Auto Update Working Progress"]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
+permissions: write-all
+
+env:
+  RAR_SOURCE_NAME: ${{ vars.RAR_SOURCE_NAME }}
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  rar-source:
+    name: RAR Source
+    runs-on: ubuntu-latest
+    needs: working-progress
+    steps:
+      - name: Checkout
+        uses: actions/checkout@main
+
+      - name: Install rar
+        run: sudo apt-get install rar
+
+      - name: RAR source
+        run: |
+          mkdir ${{ env.RAR_SOURCE_NAME }}
+          cp -r *Bai* *.sln ${{ env.RAR_SOURCE_NAME }}
+          rar a -r ${{ env.RAR_SOURCE_NAME }}.rar ${{ env.RAR_SOURCE_NAME }}
+
+      - name: Release RAR source code
+        uses: svenstaro/upload-release-action@master
+        with:
+          repo_token: ${{ env.GITHUB_TOKEN }}
+          file: ${{ env.RAR_SOURCE_NAME }}.rar
+          tag: RAR
+          release_name: RAR Source Code
+          body: "Rar source code để nộp bài, không bao gồm các file ngoài Visual Studio"

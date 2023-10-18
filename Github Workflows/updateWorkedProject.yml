@@ -11,6 +11,11 @@ concurrency:
   group: ${{ github.workflow }}
   cancel-in-progress: true
 
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  USERNAME: ${{ secrets.ACTION_RUNNER_USERNAME }}
+  EMAIL: ${{ secrets.ACTION_RUNNER_EMAIL }}
+
 permissions: write-all
 
 jobs:
@@ -25,14 +30,27 @@ jobs:
         with:
           python-version: "3.11"
 
+      - name: Download checkWorkingProgress.py
+        run:
+          curl -s https://github.com/NMLT-NTTMK-K18/Utilities/raw/main/Check%20Working%20Progress/checkWorkingProgress.py > checkWorkingProgress.py
+
       - name: Run python script
-        run: python scripts/checkWorkedProject.py
+        run: python checkWorkingProgress.py
 
       - name: Github commit & push
         continue-on-error: true
         run: |
-          git config --global user.email "action@github.com"
-          git config --global user.name "GitHub Action"
+          rm -rf checkWorkingProgress.py
+          if [ -n "${{ env.EMAIL }}" ]; then
+            git config --global user.email ${{ env.EMAIL }}
+          else
+            git config --global user.email "action@github.com"
+          fi
+          if [ -n "${{ env.USERNAME }}" ]; then
+            git config --global user.name ${{ env.USERNAME }}
+          else
+            git config --global user.name "GitHub Action"
+          fi
           git add .
           git commit -m "✅ Auto update Working Progress"
           git push
