@@ -23,7 +23,7 @@ def createProblemName(n: int) -> str:
     """Create the name of problem
     arg:
         n: The number of problem"""
-    return f'Problem{n:03}'
+    return f'Problem_{n:03}'
 
 
 def createProblemFolder(folder_name: str) -> None:
