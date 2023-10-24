@@ -17,6 +17,22 @@
 [![genVS.py](https://img.shields.io/badge/gen_VS-click_&_save-D2E0FB?style=for-the-badge&logo=visual-studio)](../../raw/main/Generate%20VS%20Solution%20%26%20Projects/genVS.py)
 [![genVS V2.py](https://img.shields.io/badge/gen_VS_v2-click_&_save-D7E5CA?style=for-the-badge&logo=visual-studio)](../../raw/main/Generate%20VS%20Solution%20%26%20Projects/genVS_v2.py)
 
+## GENERATE WECODE REPO
+
+[![GenWeCode.py](https://img.shields.io/badge/gen_wecode-click_&_save-D2E0FB?style=for-the-badge&logo)](../../raw/main/200-wecode%20Generate/GenWeCode.py)
+
+## INSTALL MINGW FOR C++ COMPILER
+
+-   Tải nhanh luôn
+
+[![MinGW x32](https://img.shields.io/badge/MinGW_x32-download-D2E0FB?style=for-the-badge)](../../releases/download/MinGW/MinGW.x32.zip)
+[![MinGW x64](https://img.shields.io/badge/MinGW_x64-download-D7E5CA?style=for-the-badge)](../../releases/download/MinGW/MinGW.x64.zip)
+
+> **Note**
+> x64: https://github.com/Vuniverse0/mingwInstaller/releases/ (Choose POSIX instead Win32)
+>
+> x32: https://sourceforge.net/projects/mingw/files/Installer/mingw-get-setup.exe/download
+
 ## COLOR ORDER
 
 -   red
