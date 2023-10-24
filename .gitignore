@@ -8,5 +8,10 @@
 **/x64
 Bai*/*.exe
 
+# CodeBlocks
+**/*bin
+**/*obj
+**/TestCodeBlock*
+
 # Python
 # **/*.py
