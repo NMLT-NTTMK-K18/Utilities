@@ -1,31 +1,35 @@
+"""
+Python script for checking working progress of 200-wecode
+"""
+
 import re
 import os
 
-re_pattern = r'.*Bai[0-9]{3}'
 re_pattern_readme = r'\[!\[WorkedProject Badge\].+'
 replace_worked_project_badge = r'[![WorkedProject Badge](https://img.shields.io/badge/worked_project-{count_worked_files}%2F{count_projects}-82A0D8?style=for-the-badge)](./UnworkedProject.md)'
-source_code_filename = 'Source.cpp'
 README_file_dir = 'docs/README.md'
 UnworkedProject_filename = 'docs/UnworkedProject.md'
-undone_sign_list = [r'//undone', r'//chuaxong',
+undone_sign_list = [r'//undone', r'//chuaxong', r'//chưaxong',
                     r'//haventdone', r'//haven\'tdone']
 done_sign_list = [r'//done', r'//xong', r'//daxong', r'//đãxong']
 UnworkedProject_file_content = r"""
 ## UNWORKED PROJECTS
 
-List các file `{source_code_filename}` chưa làm:
+List các file chưa làm:
 
-""".format(source_code_filename=source_code_filename)
+""".lstrip('\n')
 
 
 def listOfProject():
-    global directories
+    global cpp_files_aths
     global count_projects
-    directories = []
-    directories += [project_dir for project_dir in os.listdir(
-        './') if re.match(re_pattern, project_dir) and os.path.isdir(project_dir)]
-    directories.sort()
-    count_projects = len(directories)
+    cpp_files_aths = []
+    for root, dirs, files in os.walk('.'):
+        for file in files:
+            if file.endswith('.cpp'):
+                cpp_files_aths.append(os.path.join(root, file))
+    cpp_files_aths.sort()
+    count_projects = len(cpp_files_aths)
 
 
 def forceCheckDone(file_path):
@@ -51,17 +55,19 @@ def checkWorkedProject():
         file.write(f'{UnworkedProject_file_content}'.format())
 
     i = 1
-    for project_dir in directories:
-        file_path = os.path.join(project_dir, source_code_filename)
-        if forceCheckDoneStatus := (forceCheckDone(file_path)) == 1:
+    for cpp_file_path in cpp_files_aths:
+        if forceCheckDoneStatus := (forceCheckDone(cpp_file_path)) == 1:
             count_worked_files += 1
-        elif forceCheckDoneStatus == 0 and os.path.getsize(file_path) > 100:
+        elif forceCheckDoneStatus == 0 and os.path.getsize(cpp_file_path) > 100:
             count_worked_files += 1
         else:
-            project_dir_relative_path = project_dir.replace(' ', '%20')
+            cpp_file_relative_path = cpp_file_path.replace(
+                ' ', '%20').replace('\\', '/')[2:]
+            cpp_file_basename = os.path.basename(
+                cpp_file_path).replace('.cpp', '')
             with open(UnworkedProject_filename, 'a', encoding='utf8') as file:
                 file.write(
-                    f'{i}.\t[{project_dir}](../{project_dir_relative_path}/{source_code_filename})\n')
+                    f'{i}.\t[{cpp_file_basename}](../{cpp_file_relative_path})\n')
             i += 1
 
 
