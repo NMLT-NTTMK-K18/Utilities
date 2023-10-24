@@ -44,7 +44,14 @@
 
 ---
 
-## COLOR ORDER
+## COLOR
+
+### Pastel
+
+-   For each name of repo: https://colorhunt.co/palette/ecee818ddfcb82a0d8edb7ed
+-   Information in .github repo: https://colorhunt.co/palette/fbf0b2ffc7ead8b4f8caedff
+
+### Order
 
 -   red
 -   orange
