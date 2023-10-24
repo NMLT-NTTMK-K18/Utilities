@@ -37,7 +37,7 @@ def createCPPName(n: int, i: int) -> str:
     """Create the name of C++ file
     arg:
         n: The number of C++ file"""
-    return f'{n}.{i:03}.cpp'
+    return f'{n}_{i:03}.cpp'
 
 
 def createOneCPPFile(n: int, i: int) -> None:
