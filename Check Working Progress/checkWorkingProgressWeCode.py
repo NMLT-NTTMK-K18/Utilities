@@ -7,7 +7,7 @@ import os
 
 re_unworked = r'\[!\[Unworked Badge\].+'
 re_worked = r'\[!\[Worked Badge\].+'
-replace_unworked_project_badge = r'[![Unworked Badge](https://img.shields.io/badge/progress-{count_unworked_projects}%20%2F%20{count_projects}-FF8080?style=for-the-badge)](./UnworkedProject.md)'
+replace_unworked_project_badge = r'[![Unworked Badge](https://img.shields.io/badge/pending-{count_unworked_projects}%20%2F%20{count_projects}-FF8080?style=for-the-badge)](./UnworkedProject.md)'
 replace_worked_project_badge = r'[![Worked Badge](https://img.shields.io/badge/done-{count_worked_projects}%20%2F%20{count_projects}-82A0D8?style=for-the-badge)](./WorkedProject.md)'
 README_file_dir = 'docs/README.md'
 unworked_project_filename = 'docs/UnworkedProject.md'
