@@ -5,6 +5,8 @@ Python script for checking working progress of 200-wecode
 import re
 import os
 
+# GLOBAL VARS
+
 re_unworked = r'\[!\[Unworked Badge\].+'
 re_worked = r'\[!\[Worked Badge\].+'
 replace_unworked_project_badge = r'[![Unworked Badge](https://img.shields.io/badge/pending-{count_unworked_projects}%20%2F%20{count_projects}-FF8080?style=for-the-badge)](./UnworkedProject.md)'
@@ -27,18 +29,31 @@ worked_project_file_content = r"""
 List các file đã làm:
 
 """.lstrip('\n')
+work_readme_problem_header = r"""
+## {problem}
+"""
 
 
 def listOfProject():
-    global cpp_files_paths
+    # global cpp_files_paths
     global count_projects
+    global dict_of_problem_contains_projects
     cpp_files_paths = []
-    for root, dirs, files in os.walk('.'):
-        for file in files:
-            if file.endswith('.cpp'):
-                cpp_files_paths.append(os.path.join(root, file))
+    dict_of_problem_contains_projects = {}
+    count_projects = 0
+    problem_folders = [
+        folder for folder in os.listdir() if folder.startswith('Problem')]
+    problem_folders.sort()
+    for problem_folder in problem_folders:
+        cpp_file_list = []
+        for cpp_file in os.listdir(problem_folder):
+            if cpp_file.endswith('.cpp'):
+                cpp_file_list += cpp_file
+                count_projects += 1
+        cpp_file_list.sort()
+        dict_of_problem_contains_projects.update(
+            {problem_folder: cpp_file_list})
     cpp_files_paths.sort()
-    count_projects = len(cpp_files_paths)
 
 
 def forceCheckDone(file_path):
@@ -56,9 +71,9 @@ def forceCheckDone(file_path):
     return 0
 
 
-def createMarkDownFile(cpp_file_path, markdown_file, i):
+def editWorkMarkDownFile(cpp_file_path, markdown_file, i):
     cpp_file_relative_path = cpp_file_path.replace(
-        ' ', '%20').replace('\\', '/')[2:]
+        ' ', '%20').replace('\\', '/')
     cpp_file_basename = os.path.basename(
         cpp_file_path).replace('.cpp', '')
     with open(markdown_file, 'a', encoding='utf8') as file:
@@ -71,22 +86,31 @@ def checkWorkedProject():
     count_worked_projects = 0
 
     with open(unworked_project_filename, 'w', encoding='utf8') as file:
-        file.write(f'{unworked_project_file_content}'.format())
+        file.write(f'{unworked_project_file_content}')
 
     with open(worked_project_filename, 'w', encoding='utf8') as file:
-        file.write(f'{worked_project_file_content}'.format())
+        file.write(f'{worked_project_file_content}')
 
-    index_for_worked = 1
-    index_for_unworked = 1
-    for cpp_file_path in cpp_files_paths:
-        if forceCheckDone(cpp_file_path) == -1 or os.path.getsize(cpp_file_path) < 100:
-            createMarkDownFile(
-                cpp_file_path, unworked_project_filename, index_for_unworked)
-            index_for_unworked += 1
-        else:
-            count_worked_projects += 1
-            createMarkDownFile(
-                cpp_file_path, worked_project_filename, index_for_worked)
+    for problem_folder, cpp_file_list in dict_of_problem_contains_projects.items():
+        index_done = 1
+        index_undone = 1
+        with open(unworked_project_filename, 'a', encoding='utf8') as file:
+            file.write(work_readme_problem_header.format(
+                problem=problem_folder.upper()))
+        with open(worked_project_filename, 'a', encoding='utf8') as file:
+            file.write(work_readme_problem_header.format(
+                problem=problem_folder.upper()))
+        for cpp_file in cpp_file_list:
+            cpp_file_path = os.path.join(problem_folder, cpp_file)
+            if forceCheckDone(cpp_file_path) == -1 or os.path.getsize(cpp_file_path) < 100:
+                editWorkMarkDownFile(cpp_file_path, unworked_project_filename,
+                                     index_undone)
+                index_undone += 1
+            else:
+                count_worked_projects += 1
+                editWorkMarkDownFile(cpp_file_path, worked_project_filename,
+                                     index_done)
+                index_done += 1
 
 
 def editREADME():
