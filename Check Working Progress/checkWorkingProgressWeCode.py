@@ -76,14 +76,17 @@ def checkWorkedProject():
     with open(worked_project_filename, 'w', encoding='utf8') as file:
         file.write(f'{worked_project_file_content}'.format())
 
-    index = 1
+    index_for_worked = 1
+    index_for_unworked = 1
     for cpp_file_path in cpp_files_paths:
-        if forceCheckDoneStatus := (forceCheckDone(cpp_file_path)) in [0, 1] or os.path.getsize(cpp_file_path) > 100:
-            count_worked_projects += 1
-            createMarkDownFile(cpp_file_path, worked_project_filename, index)
+        if forceCheckDone(cpp_file_path) == -1 or os.path.getsize(cpp_file_path) < 100:
+            createMarkDownFile(
+                cpp_file_path, unworked_project_filename, index_for_unworked)
+            index_for_unworked += 1
         else:
-            createMarkDownFile(cpp_file_path, unworked_project_filename, index)
-            index += 1
+            count_worked_projects += 1
+            createMarkDownFile(
+                cpp_file_path, worked_project_filename, index_for_worked)
 
 
 def editREADME():
