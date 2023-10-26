@@ -50,7 +50,9 @@
 ### Pastel
 
 -   For each name of repo: https://colorhunt.co/palette/ecee818ddfcb82a0d8edb7ed
--   Information in .github repo: https://colorhunt.co/palette/fbf0b2ffc7ead8b4f8caedff
+-   Information in .github repo:
+    -   https://colorkit.co/palette/ffadad-ffd6a5-fdffb6-caffbf-9bf6ff-a0c4ff-bdb2ff-ffc6ff
+    -   https://colorhunt.co/palette/fbf0b2ffc7ead8b4f8caedff
 
 ### Order
 
