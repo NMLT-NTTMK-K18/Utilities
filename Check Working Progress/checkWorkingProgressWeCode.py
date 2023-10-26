@@ -20,15 +20,13 @@ done_sign_list = [r'//done', r'//xong', r'//daxong', r'//đãxong']
 unworked_project_file_content = r"""
 ## UNWORKED PROJECTS
 
-List các file chưa làm:
 """.lstrip('\n')
 worked_project_file_content = r"""
 ## WORKED PROJECTS
 
-List các file đã làm:
 """.lstrip('\n')
 work_readme_problem_header = r"""
-## {problem}
+### {problem}
 
 """
 
