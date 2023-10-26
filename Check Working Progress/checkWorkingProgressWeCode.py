@@ -5,31 +5,40 @@ Python script for checking working progress of 200-wecode
 import re
 import os
 
-re_pattern_readme = r'\[!\[WorkedProject Badge\].+'
-replace_worked_project_badge = r'[![WorkedProject Badge](https://img.shields.io/badge/progress-{count_worked_files}%20%2F%20{count_projects}-82A0D8?style=for-the-badge)](./UnworkedProject.md)'
+re_unworked = r'\[!\[Unworked Badge\].+'
+re_worked = r'\[!\[Worked Badge\].+'
+replace_unworked_project_badge = r'[![Unworked Badge](https://img.shields.io/badge/progress-{count_unworked_projects}%20%2F%20{count_projects}-FF8080?style=for-the-badge)](./UnworkedProject.md)'
+replace_worked_project_badge = r'[![Worked Badge](https://img.shields.io/badge/done-{count_worked_projects}%20%2F%20{count_projects}-82A0D8?style=for-the-badge)](./WorkedProject.md)'
 README_file_dir = 'docs/README.md'
-UnworkedProject_filename = 'docs/UnworkedProject.md'
+unworked_project_filename = 'docs/UnworkedProject.md'
+worked_project_filename = 'docs/WorkedProject.md'
 undone_sign_list = [r'//undone', r'//chuaxong', r'//chưaxong',
                     r'//haventdone', r'//haven\'tdone']
 done_sign_list = [r'//done', r'//xong', r'//daxong', r'//đãxong']
-UnworkedProject_file_content = r"""
+unworked_project_file_content = r"""
 ## UNWORKED PROJECTS
 
 List các file chưa làm:
 
 """.lstrip('\n')
+worked_project_file_content = r"""
+## WORKED PROJECTS
+
+List các file đã làm:
+
+""".lstrip('\n')
 
 
 def listOfProject():
-    global cpp_files_aths
+    global cpp_files_paths
     global count_projects
-    cpp_files_aths = []
+    cpp_files_paths = []
     for root, dirs, files in os.walk('.'):
         for file in files:
             if file.endswith('.cpp'):
-                cpp_files_aths.append(os.path.join(root, file))
-    cpp_files_aths.sort()
-    count_projects = len(cpp_files_aths)
+                cpp_files_paths.append(os.path.join(root, file))
+    cpp_files_paths.sort()
+    count_projects = len(cpp_files_paths)
 
 
 def forceCheckDone(file_path):
@@ -47,28 +56,34 @@ def forceCheckDone(file_path):
     return 0
 
 
+def createMarkDownFile(cpp_file_path, markdown_file, i):
+    cpp_file_relative_path = cpp_file_path.replace(
+        ' ', '%20').replace('\\', '/')[2:]
+    cpp_file_basename = os.path.basename(
+        cpp_file_path).replace('.cpp', '')
+    with open(markdown_file, 'a', encoding='utf8') as file:
+        file.write(
+            f'{i}.\t[{cpp_file_basename}](../{cpp_file_relative_path})\n')
+
+
 def checkWorkedProject():
-    global count_worked_files
-    count_worked_files = 0
+    global count_worked_projects
+    count_worked_projects = 0
 
-    with open(UnworkedProject_filename, 'w', encoding='utf8') as file:
-        file.write(f'{UnworkedProject_file_content}'.format())
+    with open(unworked_project_filename, 'w', encoding='utf8') as file:
+        file.write(f'{unworked_project_file_content}'.format())
 
-    i = 1
-    for cpp_file_path in cpp_files_aths:
-        if forceCheckDoneStatus := (forceCheckDone(cpp_file_path)) == 1:
-            count_worked_files += 1
-        elif forceCheckDoneStatus == 0 and os.path.getsize(cpp_file_path) > 100:
-            count_worked_files += 1
+    with open(worked_project_filename, 'w', encoding='utf8') as file:
+        file.write(f'{worked_project_file_content}'.format())
+
+    index = 1
+    for cpp_file_path in cpp_files_paths:
+        if forceCheckDoneStatus := (forceCheckDone(cpp_file_path)) in [0, 1] or os.path.getsize(cpp_file_path) > 100:
+            count_worked_projects += 1
+            createMarkDownFile(cpp_file_path, worked_project_filename, index)
         else:
-            cpp_file_relative_path = cpp_file_path.replace(
-                ' ', '%20').replace('\\', '/')[2:]
-            cpp_file_basename = os.path.basename(
-                cpp_file_path).replace('.cpp', '')
-            with open(UnworkedProject_filename, 'a', encoding='utf8') as file:
-                file.write(
-                    f'{i}.\t[{cpp_file_basename}](../{cpp_file_relative_path})\n')
-            i += 1
+            createMarkDownFile(cpp_file_path, unworked_project_filename, index)
+            index += 1
 
 
 def editREADME():
@@ -77,9 +92,12 @@ def editREADME():
 
     with open(README_file_dir, 'w', encoding='utf8') as file:
         for line in content:
-            if re.match(re_pattern_readme, line):
+            if re.match(re_worked, line):
                 file.write(
-                    f'{replace_worked_project_badge}\n'.format(count_worked_files=count_worked_files, count_projects=count_projects))
+                    f'{replace_worked_project_badge}\n'.format(count_worked_projects=count_worked_projects, count_projects=count_projects))
+            elif re.match(re_unworked, line):
+                file.write(
+                    f'{replace_unworked_project_badge}\n'.format(count_unworked_projects=count_projects - count_worked_projects, count_projects=count_projects))
             else:
                 file.write(line)
 
