@@ -21,16 +21,15 @@ unworked_project_file_content = r"""
 ## UNWORKED PROJECTS
 
 List các file chưa làm:
-
 """.lstrip('\n')
 worked_project_file_content = r"""
 ## WORKED PROJECTS
 
 List các file đã làm:
-
 """.lstrip('\n')
 work_readme_problem_header = r"""
 ## {problem}
+
 """
 
 
@@ -38,7 +37,6 @@ def listOfProject():
     # global cpp_files_paths
     global count_projects
     global dict_of_problem_contains_projects
-    cpp_files_paths = []
     dict_of_problem_contains_projects = {}
     count_projects = 0
     problem_folders = [
@@ -48,12 +46,11 @@ def listOfProject():
         cpp_file_list = []
         for cpp_file in os.listdir(problem_folder):
             if cpp_file.endswith('.cpp'):
-                cpp_file_list += cpp_file
+                cpp_file_list += [cpp_file]
                 count_projects += 1
         cpp_file_list.sort()
         dict_of_problem_contains_projects.update(
             {problem_folder: cpp_file_list})
-    cpp_files_paths.sort()
 
 
 def forceCheckDone(file_path):
