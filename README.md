@@ -3,8 +3,7 @@
 [![GitHub last commit (by committer)](https://img.shields.io/github/last-commit/NMLT-NTTMK-K18/Utilities?style=for-the-badge&color=CAEDFF)](../../../commits/main)
 ![GitHub repo size](https://img.shields.io/github/repo-size/NMLT-NTTMK-K18/Utilities?style=for-the-badge&color=D8B4F8)
 [![GitHub contributors](https://img.shields.io/github/contributors/NMLT-NTTMK-K18/Utilities?style=for-the-badge&color=FBF0B2)](../../../graphs/contributors)
-
-[![CodeFactor](https://www.codefactor.io/repository/github/nmlt-nttmk-k18/Utilities/badge)](https://www.codefactor.io/repository/github/nmlt-nttmk-k18/Utilities)
+[![CodeFactor](https://img.shields.io/codefactor/grade/github/nmlt-nttmk-k18/Utilities?style=for-the-badge)](https://www.codefactor.io/repository/github/nmlt-nttmk-k18/Utilities)
 
 ---
 
