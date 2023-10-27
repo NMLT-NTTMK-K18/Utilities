@@ -8,14 +8,15 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  GITHUB_TOKEN: ${{ secrets.RECURSION_REPO_GITHUB_TOKEN }}
-  TARGET_REPO: ${{ secrets.OWNER_REPO }}
-  USERNAME: ${{ secrets.ACTION_RUNNER_USERNAME }}
-  EMAIL: ${{ secrets.ACTION_RUNNER_EMAIL }}
-  USER_COMMIT_MESSAGE: ${{ secrets.USER_COMMIT_MESSAGE }}
-  USER_ORDER: ${{ secrets.USER_ORDER }}
-  NUMBER_OF_MEMS: ${{ secrets.NUMBER_OF_MEMS }}
-  NUMBER_OF_PROJECTS: ${{ secrets.NUMBER_OF_PROJECTS }}
+  GITHUB_TOKEN: ${{ secrets.USER_GITHUB_TOKEN }}
+  SOURCE_REPO_LINK: https://github.com/UIT-Together-2022-Team-Nobita/Recursion-CPP
+  TARGET_REPO: ${{ vars.OWNER_REPO }}
+  USERNAME: ${{ vars.ACTION_RUNNER_USERNAME }}
+  EMAIL: ${{ vars.ACTION_RUNNER_EMAIL }}
+  USER_COMMIT_MESSAGE: ${{ vars.USER_COMMIT_MESSAGE }}
+  USER_ORDER: ${{ vars.USER_ORDER }}
+  NUMBER_OF_MEMS: ${{ vars.NUMBER_OF_MEMS }}
+  NUMBER_OF_PROJECTS: ${{ vars.NUMBER_OF_PROJECTS }}
 
 permissions: write-all
 
@@ -31,11 +32,10 @@ jobs:
           token: ${{ env.GITHUB_TOKEN }}
 
       - name: Download UIT Together's Repo
-        run: |
-          mkdir Recursion-UIT-Together
-          git clone https://github.com/UIT-Together-2022-Team-Nobita/Recursion-CPP Recursion-UIT-Together
+        run: git clone --depth 1 ${{ env.SOURCE_REPO_LINK }} Recursion-UIT-Together
 
-      - name: Set up User
+      - name: Set up User, move, add, commit and push
+        continue-on-error: true
         run: |
           if [ -n "${{ env.EMAIL }}" ]; then
             git config --global user.email ${{ env.EMAIL }}
@@ -47,21 +47,40 @@ jobs:
           else
             exit 1
           fi
-          list_of_exercises_of_user = ()
+          list_of_exercises_of_user=()
           for ((num=${{ env.USER_ORDER }}; num<=${{ env.NUMBER_OF_PROJECTS }}; num=num+${{ env.NUMBER_OF_MEMS }})); do
-            list+=($(printf "%03d" "$num))
+            list_of_exercises_of_user+=($(printf "%03d" "$num"))
           done
-          # echo "List of exercises of user ${{ env.USER_ORDER }}"
-          # echo $list_of_exercises_of_user
-          echo "list_of_exercises_of_user=$list_of_exercises_of_user" >> $GITHUB_ENV
-
-      - name: Loop copy, add, commit and push
-        run: |
-          for i in "$list_of_exercises_of_user[@]"; do
-            mv -f Recursion-UIT-Together/$(find ./Recursion-UIT-Together/ -type d -name 'Bai$i*' -print -quit)/Bai$i.cpp Bai$i/Source.cpp
+          echo "List of exercises of user ${{ env.USER_ORDER }}"
+          echo "${list_of_exercises_of_user[@]}"
+          echo "---"
+          for i in "${list_of_exercises_of_user[@]}"; do
+            folder_dir=$(find Recursion-UIT-Together -type d -name "[Bb]ai$i*" -print -quit)
+            if [ -z "${folder_dir}" ]; then
+              echo "Error: Directory Bai${i} not found."
+              continue
+            fi
+            file_dir=$(find $folder_dir -type f -name "[Bb]ai$i*.cpp" -print -quit)
+            if [ -z "${file_dir}" ]; then
+              echo "Error: File Bai${i} not found in directory ${folder_dir}."
+              continue
+            fi
+            echo "Moving $file_dir from $folder_dir"
+            mv -f $file_dir Bai$i/Source.cpp
             git add Bai$i/Source.cpp
-            git commit -m "${{ env.USER_COMMIT_MESSAGE }} Bai$i"
-            random_number=$((RANDOM % 61 + 20))
+            git commit -m "${{ env.USER_COMMIT_MESSAGE }}"
+            echo "---"
+            echo "Done commit Bai$i!"
+            echo "---"
+            random_number=$((RANDOM % (500 - 200 + 1) + 200))
+            echo "Sleeping for $random_number seconds..."
             sleep $random_number
+            echo "End sleeping"
+            echo "---"
           done
-          git push
+          echo "Done commit all!"
+          rm -rf Recursion-UIT-Together
+          git pull
+          git add .
+          git commit -m "Merge from upstream"
+          git push origin main
