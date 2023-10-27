@@ -107,9 +107,11 @@
 
 ## .GITATTRIBUTES TEMPLATE
 
-```.gitattributes
-**/*.cpp linguist-language=C++ eol=lf
+```.gitignore
+**/*.cpp text linguist-language=C++ eol=lf
 ```
+
+<!-- Để .gitignore cho nó lên màu render markdown cho đẹp :v-->
 
 ## COLOR
 
