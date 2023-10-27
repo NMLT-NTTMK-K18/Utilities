@@ -1,0 +1,67 @@
+name: Copy Recursion from UIT Together
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
+env:
+  GITHUB_TOKEN: ${{ secrets.RECURSION_REPO_GITHUB_TOKEN }}
+  TARGET_REPO: ${{ secrets.OWNER_REPO }}
+  USERNAME: ${{ secrets.ACTION_RUNNER_USERNAME }}
+  EMAIL: ${{ secrets.ACTION_RUNNER_EMAIL }}
+  USER_COMMIT_MESSAGE: ${{ secrets.USER_COMMIT_MESSAGE }}
+  USER_ORDER: ${{ secrets.USER_ORDER }}
+  NUMBER_OF_MEMS: ${{ secrets.NUMBER_OF_MEMS }}
+  NUMBER_OF_PROJECTS: ${{ secrets.NUMBER_OF_PROJECTS }}
+
+permissions: write-all
+
+jobs:
+  copy:
+    name: Copy Recursion from UIT Together
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@main
+        with:
+          repository: ${{ env.TARGET_REPO }}
+          token: ${{ env.GITHUB_TOKEN }}
+
+      - name: Download UIT Together's Repo
+        run: |
+          mkdir Recursion-UIT-Together
+          git clone https://github.com/UIT-Together-2022-Team-Nobita/Recursion-CPP Recursion-UIT-Together
+
+      - name: Set up User
+        run: |
+          if [ -n "${{ env.EMAIL }}" ]; then
+            git config --global user.email ${{ env.EMAIL }}
+          else
+            exit 1
+          fi
+          if [ -n "${{ env.USERNAME }}" ]; then
+            git config --global user.name ${{ env.USERNAME }}
+          else
+            exit 1
+          fi
+          list_of_exercises_of_user = ()
+          for ((num=${{ env.USER_ORDER }}; num<=${{ env.NUMBER_OF_PROJECTS }}; num=num+${{ env.NUMBER_OF_MEMS }})); do
+            list+=($(printf "%03d" "$num))
+          done
+          # echo "List of exercises of user ${{ env.USER_ORDER }}"
+          # echo $list_of_exercises_of_user
+          echo "list_of_exercises_of_user=$list_of_exercises_of_user" >> $GITHUB_ENV
+
+      - name: Loop copy, add, commit and push
+        run: |
+          for i in "$list_of_exercises_of_user[@]"; do
+            mv -f Recursion-UIT-Together/$(find ./Recursion-UIT-Together/ -type d -name 'Bai$i*' -print -quit)/Bai$i.cpp Bai$i/Source.cpp
+            git add Bai$i/Source.cpp
+            git commit -m "${{ env.USER_COMMIT_MESSAGE }} Bai$i"
+            random_number=$((RANDOM % 61 + 20))
+            sleep $random_number
+          done
+          git push
