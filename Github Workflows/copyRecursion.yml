@@ -75,12 +75,20 @@ jobs:
             random_number=$((RANDOM % (500 - 200 + 1) + 200))
             echo "Sleeping for $random_number seconds..."
             sleep $random_number
-            echo "End sleeping"
+            echo "End sleeping for $random_number ^^"
             echo "---"
           done
           echo "Done commit all!"
           rm -rf Recursion-UIT-Together
-          git pull
-          git add .
-          git commit -m "Merge from upstream"
-          git push origin main
+          echo "Fetch repo"
+          git fetch
+          if ! git status -uno | grep "Your branch is ahead of" >/dev/null 2>&1; then
+            echo "Working tree is behind upstream so pull, add, commit and push"
+            git config pull.rebase true
+            git pull origin main
+            git commit -am "Merge from upstream"
+            git push origin main
+          else
+            echo "Push changes"
+            git push origin main
+          fi
