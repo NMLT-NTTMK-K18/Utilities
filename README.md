@@ -47,6 +47,8 @@
 > -   `genVS V2.py` _(Recommend)_: Phiên bản mới, tạo được nhiều project với nhiều số lượng khác nhau
 >
 >     > Ví dụ: Mở bài [5-258-struct](../5-258-struct) ra là biết chứ không biết diễn tả sao 😕
+>
+> -   File `.cpp` chỉ cố định là `Source.cpp`, lười implement thêm `Bai???.cpp`
 
 > **Important**
 >
@@ -64,8 +66,8 @@
 
 ## INSTALL MINGW FOR C++ COMPILER
 
--   Tải nhanh luôn _(Windows nha)_
--   Tải rồi set env path cho nó
+-   Tải nhanh luôn _(Windows)_
+-   Tải rồi set env path
 
 [![MinGW x32](https://img.shields.io/badge/MinGW_x32-download-D2E0FB?style=for-the-badge)](../../releases/download/MinGW/MinGW.x32.zip)
 [![MinGW x64](https://img.shields.io/badge/MinGW_x64-download-D7E5CA?style=for-the-badge)](../../releases/download/MinGW/MinGW.x64.zip)
@@ -108,7 +110,7 @@
 ## .GITATTRIBUTES TEMPLATE
 
 ```.gitignore
-**/*.cpp text linguist-language=C++ eol=lf
+**/*.cpp text linguist-language=C++ eol=crlf
 ```
 
 <!-- Để .gitignore cho nó lên màu render markdown cho đẹp :v-->
