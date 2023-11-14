@@ -9,18 +9,11 @@ NUMBER_OF_PROJECTS=$6
 MAX_RANDOM_TIME=$7
 MIN_RANDOM_TIME=$8
 
-if [ -n "$EMAIL" ]; then
-	git config --global user.email $EMAIL
-else
-	exit 1
-fi
+# CONFIG USER
+git config --global user.email $EMAIL
+git config --global user.name $USERNAME
 
-if [ -n "$USERNAME" ]; then
-	git config --global user.name $USERNAME
-else
-	exit 1
-fi
-
+# LIST USER TASKS
 list_of_exercises_of_user=()
 for ((num = $USER_ORDER; num <= $NUMBER_OF_PROJECTS; num = num + $NUMBER_OF_MEMS)); do
 	list_of_exercises_of_user+=($(printf "%03d" "$num"))
@@ -30,21 +23,29 @@ echo "List of exercises of user $USER_ORDER"
 echo "${list_of_exercises_of_user[@]}"
 echo "---"
 
+# COPY TIME
 for i in "${list_of_exercises_of_user[@]}"; do
+	# CHECK IF FILE IS ALREADY DONE
 	if [ $(wc -c <"Bai$i/Source.cpp") -gt 100 ]; then
 		echo "File already done by user, no need to copy"
 		continue
 	fi
+
 	folder_dir=$(find Recursion-UIT-Together -type d -name "[Bb]ai$i*" -print -quit)
+	# CHECK IF SOURCE FOLDER IS EXIST
 	if [ -z "${folder_dir}" ]; then
 		echo "Error: Directory Bai${i} not found."
 		continue
 	fi
+
 	file_dir=$(find $folder_dir -type f -name "[Bb]ai$i*.cpp" -print -quit)
+	# CHECK IF SOURCE .CPP FILE IS EXIST
 	if [ -z "${file_dir}" ]; then
 		echo "Error: File Bai${i} not found in directory ${folder_dir}."
 		continue
 	fi
+
+	# MOVING TIME
 	echo "Moving $file_dir from $folder_dir"
 	mv -f $file_dir Bai$i/Source.cpp
 	sed -i "/.*2252.*/ {N; s/.*2252.*\n//}" "Bai$i/Source.cpp"
@@ -53,6 +54,8 @@ for i in "${list_of_exercises_of_user[@]}"; do
 	echo "---"
 	echo "Done commit Bai$i!"
 	echo "---"
+
+	# SLEEPING TIME
 	random_number=$((RANDOM % ($MAX_RANDOM_TIME - $MIN_RANDOM_TIME + 1) + $MIN_RANDOM_TIME))
 	echo "Sleeping for $random_number seconds..."
 	sleep $random_number
