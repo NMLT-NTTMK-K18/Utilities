@@ -66,25 +66,25 @@
 
 **Ví dụ:**
 
-1. Copy từ tài liệu vào clipboard
+1. **Copy** từ tài liệu vào clipboard
 
     ```pdf
-    1.     int main()
-    2.     {
-    3.     int n;
-    4.     cout << "Nhap n: ";
-    5.     cin >> n;
+    00887. int main()
+    00888. {
+    00889. int n;
+    00890. cout << "Nhap n: ";
+    00891. cin >> n;
     00892.
     Đệ quy tuyến tính
     40
-    6.     int kq = DemChuSo(n);
-    7.     cout << "Ket qua: " << kq;
-    8.     return 1;
-    9.     }
+    00893. int kq = DemChuSo(n);
+    00894. cout << "Ket qua: " << kq;
+    00895. return 1;
+    00896. }
     ```
 
 2. Ấn chạy script
-3. Paste dô file `.cpp` và dùng formatter để format lại 😌 _(Không format nó không indent scope đâu 🤨)_
+3. **Paste** dô file `.cpp` và dùng **formatter** để format lại 😌 _(Không format nó không indent scope đâu 🤨)_
 
     ```.cpp
     int main()
