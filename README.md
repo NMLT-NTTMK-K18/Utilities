@@ -62,7 +62,7 @@
 [![copyAnswerFromDoc.ps1](https://img.shields.io/badge/copy_answer_from_doc-click_&_save-D2E0FB?style=for-the-badge)](../../raw/main/Copy%20Answer%20From%20Doc/copyAnswerFromDoc.ps1)
 
 -   Copy, edit, đưa lại clipboard đáp án từ tài liệu của thầy Khang
--   Có thể để script ngoài desktop, taskbar, start menu _(C:\ProgramData\Microsoft\Windows\Start Menu\Programs)_ để dễ mở
+-   Có thể để script ngoài desktop, taskbar, start menu `(C:\ProgramData\Microsoft\Windows\Start Menu\Programs)` để dễ mở
 
 **Ví dụ:**
 
