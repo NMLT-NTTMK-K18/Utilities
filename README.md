@@ -47,7 +47,7 @@
 >
 > -   `genVS V2.py` _(Recommend)_: Phiên bản mới, tạo được nhiều project với nhiều số lượng khác nhau
 >
->     > Ví dụ: Mở bài [5-258-struct](../5-258-struct) ra là biết chứ không biết diễn tả sao 😕
+>     > Ví dụ: Mở bài [5-258-struct](../../../5-258-struct) ra là biết chứ không biết diễn tả sao 😕
 >
 > -   File `.cpp` chỉ cố định là `Source.cpp`, lười implement thêm `Bai???.cpp`
 
@@ -105,7 +105,7 @@
 
 [![GenWeCode.py](https://img.shields.io/badge/gen_wecode-click_&_save-D2E0FB?style=for-the-badge&logo)](../../raw/main/200-wecode%20Generate/GenWeCode.py)
 
--   Dùng để tạo giống repo [7-200-wecode](../7-200-wecode/)
+-   Dùng để tạo giống repo [7-200-wecode](../../../7-200-wecode)
 
 ---
 
